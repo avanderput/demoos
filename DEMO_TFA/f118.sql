@@ -5,16 +5,21 @@ whenever sqlerror exit sql.sqlcode rollback
 --
 -- Oracle APEX export file
 --
--- You should run the script connected to SQL*Plus as the owner (parsing schema)
--- of the application.
+-- You should run this script using a SQL client connected to the database as
+-- the owner (parsing schema) of the application or as a database user with the
+-- APEX_ADMINISTRATOR_ROLE role.
+--
+-- This export file has been automatically generated. Modifying this file is not
+-- supported by Oracle and can lead to unexpected application and/or instance
+-- behavior now or in the future.
 --
 -- NOTE: Calls to apex_application_install override the defaults below.
 --
 --------------------------------------------------------------------------------
 begin
 wwv_flow_imp.import_begin (
- p_version_yyyy_mm_dd=>'2022.10.07'
-,p_release=>'22.2.4'
+ p_version_yyyy_mm_dd=>'2023.10.31'
+,p_release=>'23.2.3'
 ,p_default_workspace_id=>12305690058938487
 ,p_default_application_id=>118
 ,p_default_id_offset=>0
@@ -28,7 +33,7 @@ prompt APPLICATION 118 - Custom auth
 -- Application Export:
 --   Application:     118
 --   Name:            Custom auth
---   Date and Time:   08:55 Friday May 5, 2023
+--   Date and Time:   15:46 Donderdag Maart 28, 2024
 --   Exported By:     AW2020
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -65,7 +70,7 @@ prompt APPLICATION 118 - Custom auth
 --       Reports:
 --       E-Mail:
 --     Supporting Objects:  Included
---   Version:         22.2.4
+--   Version:         23.2.3
 --   Instance ID:     9495231072689776
 --
 
@@ -76,7 +81,7 @@ end;
 /
 prompt --application/create_application
 begin
-wwv_flow_imp.create_flow(
+wwv_imp_workspace.create_flow(
  p_id=>wwv_flow.g_flow_id
 ,p_owner=>nvl(wwv_flow_application_install.get_schema,'AW2020')
 ,p_name=>nvl(wwv_flow_application_install.get_application_name,'Custom auth')
@@ -86,7 +91,8 @@ wwv_flow_imp.create_flow(
 ,p_checksum_salt=>'AB69DC50256FF1EE06F445D2A4E812471BE63A8FE7D7E933CD71D524D6243E9E'
 ,p_bookmark_checksum_function=>'SH512'
 ,p_compatibility_mode=>'21.2'
-,p_flow_language=>'nl'
+,p_session_state_commits=>'IMMEDIATE'
+,p_flow_language=>'en-gb'
 ,p_flow_language_derived_from=>'FLOW_PRIMARY_LANGUAGE'
 ,p_allow_feedback_yn=>'Y'
 ,p_date_format=>'DS'
@@ -94,7 +100,6 @@ wwv_flow_imp.create_flow(
 ,p_timestamp_tz_format=>'DS'
 ,p_direction_right_to_left=>'N'
 ,p_flow_image_prefix => nvl(wwv_flow_application_install.get_image_prefix,'')
-,p_authentication=>'PLUGIN'
 ,p_authentication_id=>wwv_flow_imp.id(17655776493350898)
 ,p_application_tab_set=>1
 ,p_logo_type=>'T'
@@ -103,19 +108,22 @@ wwv_flow_imp.create_flow(
 ,p_no_proxy_domains=>nvl(wwv_flow_application_install.get_no_proxy_domains,'')
 ,p_flow_version=>'Release 1.0'
 ,p_flow_status=>'AVAILABLE_W_EDIT_LINK'
+,p_flow_unavailable_text=>'This application is currently unavailable at this time.'
 ,p_exact_substitutions_only=>'Y'
 ,p_browser_cache=>'N'
 ,p_browser_frame=>'D'
+,p_pass_ecid=>'N'
 ,p_rejoin_existing_sessions=>'N'
 ,p_csv_encoding=>'Y'
 ,p_auto_time_zone=>'N'
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Custom auth'
 ,p_last_updated_by=>'AW2020'
-,p_last_upd_yyyymmddhh24miss=>'20230305070025'
+,p_last_upd_yyyymmddhh24miss=>'20240328154547'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>5
 ,p_print_server_type=>'NATIVE'
+,p_file_storage=>'DB'
 ,p_is_pwa=>'Y'
 ,p_pwa_is_installable=>'N'
 );
@@ -192,6 +200,11 @@ wwv_flow_imp_shared.create_list_item(
 ,p_parent_list_item_id=>wwv_flow_imp.id(17650869557140849)
 ,p_list_item_current_type=>'TARGET_PAGE'
 );
+end;
+/
+prompt --application/shared_components/navigation/listentry
+begin
+null;
 end;
 /
 prompt --application/shared_components/files/icons_app_icon_32_png
@@ -718,16 +731,24 @@ end;
 prompt --application/plugin_settings
 begin
 wwv_flow_imp_shared.create_plugin_setting(
+ p_id=>wwv_flow_imp.id(1389853258476532)
+,p_plugin_type=>'WEB SOURCE TYPE'
+,p_plugin=>'NATIVE_ADFBC'
+,p_version_scn=>40163161811732
+);
+wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17435036441140564)
 ,p_plugin_type=>'REGION TYPE'
 ,p_plugin=>'NATIVE_DISPLAY_SELECTOR'
 ,p_attribute_01=>'Y'
+,p_version_scn=>1
 );
 wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17435366321140567)
 ,p_plugin_type=>'REGION TYPE'
 ,p_plugin=>'NATIVE_IR'
 ,p_attribute_01=>'IG'
+,p_version_scn=>1
 );
 wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17435645571140567)
@@ -735,12 +756,14 @@ wwv_flow_imp_shared.create_plugin_setting(
 ,p_plugin=>'NATIVE_STAR_RATING'
 ,p_attribute_01=>'fa-star'
 ,p_attribute_04=>'#VALUE#'
+,p_version_scn=>1
 );
 wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17435946631140567)
 ,p_plugin_type=>'REGION TYPE'
 ,p_plugin=>'NATIVE_MAP_REGION'
 ,p_attribute_01=>'Y'
+,p_version_scn=>1
 );
 wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17436262134140567)
@@ -748,6 +771,7 @@ wwv_flow_imp_shared.create_plugin_setting(
 ,p_plugin=>'NATIVE_COLOR_PICKER'
 ,p_attribute_01=>'FULL'
 ,p_attribute_02=>'POPUP'
+,p_version_scn=>1
 );
 wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17436520593140567)
@@ -756,6 +780,7 @@ wwv_flow_imp_shared.create_plugin_setting(
 ,p_attribute_01=>'Y'
 ,p_attribute_03=>'N'
 ,p_attribute_05=>'SWITCH_CB'
+,p_version_scn=>1
 );
 wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17436842630140568)
@@ -763,15 +788,7 @@ wwv_flow_imp_shared.create_plugin_setting(
 ,p_plugin=>'NATIVE_SINGLE_CHECKBOX'
 ,p_attribute_01=>'Y'
 ,p_attribute_02=>'N'
-);
-wwv_flow_imp_shared.create_plugin_setting(
- p_id=>wwv_flow_imp.id(17437165608140568)
-,p_plugin_type=>'ITEM TYPE'
-,p_plugin=>'NATIVE_DATE_PICKER_JET'
-,p_attribute_01=>'MONTH-PICKER:YEAR-PICKER'
-,p_attribute_02=>'VISIBLE'
-,p_attribute_03=>'15'
-,p_attribute_04=>'FOCUS'
+,p_version_scn=>1
 );
 wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17437499516140568)
@@ -781,6 +798,7 @@ wwv_flow_imp_shared.create_plugin_setting(
 ,p_attribute_02=>'VISIBLE'
 ,p_attribute_03=>'15'
 ,p_attribute_04=>'FOCUS'
+,p_version_scn=>1
 );
 wwv_flow_imp_shared.create_plugin_setting(
  p_id=>wwv_flow_imp.id(17437703878140568)
@@ -791,6 +809,7 @@ wwv_flow_imp_shared.create_plugin_setting(
 ,p_attribute_03=>'POPUP:ITEM'
 ,p_attribute_04=>'default'
 ,p_attribute_06=>'LIST'
+,p_version_scn=>1
 );
 end;
 /
@@ -14535,6 +14554,7 @@ wwv_flow_imp_shared.create_build_option(
  p_id=>wwv_flow_imp.id(17438069255140569)
 ,p_build_option_name=>'Commented Out'
 ,p_build_option_status=>'EXCLUDE'
+,p_version_scn=>1
 );
 end;
 /
@@ -14648,7 +14668,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'16'
 ,p_last_updated_by=>'AW2020'
-,p_last_upd_yyyymmddhh24miss=>'20230305070025'
+,p_last_upd_yyyymmddhh24miss=>'20240328154100'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(17711998206467708)
@@ -14657,7 +14677,6 @@ wwv_flow_imp_page.create_page_plug(
 ,p_plug_template=>wwv_flow_imp.id(17507688145140648)
 ,p_plug_display_sequence=>10
 ,p_include_in_reg_disp_sel_yn=>'Y'
-,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_attribute_01=>'N'
 ,p_attribute_02=>'HTML'
 );
@@ -14677,7 +14696,6 @@ wwv_flow_imp_page.create_page_plug(
 '    <li>Enter the code and press "Verify" to complete the activation.</li>',
 '  </ol>',
 '</div>'))
-,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_attribute_01=>'N'
 ,p_attribute_02=>'HTML'
 );
@@ -14689,7 +14707,6 @@ wwv_flow_imp_page.create_page_plug(
 ,p_plug_template=>wwv_flow_imp.id(17507688145140648)
 ,p_plug_display_sequence=>20
 ,p_plug_display_point=>'SUB_REGIONS'
-,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_attribute_01=>'N'
 ,p_attribute_02=>'HTML'
 );
@@ -14751,12 +14768,12 @@ wwv_flow_imp_page.create_page_process(
 ,p_process_name=>'saveSecret and validateOTP'
 ,p_process_sql_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'begin',
-'  update aw2023_users',
+'  update demotfa_users',
 '  set    shared_secret = :P9997_SHARED_SECRET',
 '  where  upper(username) = upper(:P9997_USERNAME);',
-'  if aw2023_auth.validate_otp ( p_username => :P9997_USERNAME',
-'                              , p_otp      => :P9997_OTP',
-'                              )',
+'  if demotfa_auth.validate_otp ( p_username => :P9997_USERNAME',
+'                               , p_otp      => :P9997_OTP',
+'                               )',
 '  then',
 '    :P9997_OTP := null;',
 '  else',
@@ -14767,6 +14784,7 @@ wwv_flow_imp_page.create_page_process(
 ,p_process_error_message=>'Invalid code. Run the process again.'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
 ,p_process_success_message=>'Two factor authentication activated.'
+,p_internal_uid=>17712916807467718
 );
 wwv_flow_imp_page.create_page_process(
  p_id=>wwv_flow_imp.id(17724792882881923)
@@ -14782,6 +14800,7 @@ wwv_flow_imp_page.create_page_process(
 ''))
 ,p_process_clob_language=>'PLSQL'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+,p_internal_uid=>17724792882881923
 );
 wwv_flow_imp_page.create_page_process(
  p_id=>wwv_flow_imp.id(17712440049467713)
@@ -14798,10 +14817,11 @@ wwv_flow_imp_page.create_page_process(
 '                                , p_secret => :P9997_SHARED_SECRET',
 '                                ) ',
 '  into :P9997_OTP_URI',
-'  from aw2023_users',
+'  from demotfa_users',
 '  where lower(username) = lower(:P9997_USERNAME);',
 'end;'))
 ,p_process_clob_language=>'PLSQL'
+,p_internal_uid=>17712440049467713
 );
 end;
 /
@@ -14819,7 +14839,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'16'
 ,p_last_updated_by=>'AW2020'
-,p_last_upd_yyyymmddhh24miss=>'20230304170530'
+,p_last_upd_yyyymmddhh24miss=>'20240328154309'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(17711217464467701)
@@ -14828,7 +14848,6 @@ wwv_flow_imp_page.create_page_plug(
 ,p_plug_template=>wwv_flow_imp.id(17507688145140648)
 ,p_plug_display_sequence=>10
 ,p_include_in_reg_disp_sel_yn=>'Y'
-,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_plug_header=>'Fill in the 6 digit code from your authenticator app.'
 ,p_attribute_01=>'N'
 ,p_attribute_02=>'HTML'
@@ -14881,15 +14900,16 @@ wwv_flow_imp_page.create_page_validation(
 'declare',
 '  l_ok boolean;',
 'begin',
-'  l_ok:= aw2023_auth.validate_otp ( p_username => :P9998_USERNAME',
-'                                  , p_otp      => :P9998_OTP',
-'                                  );',
+'  l_ok:= demotfa_auth.validate_otp ( p_username => :P9998_USERNAME',
+'                                   , p_otp      => :P9998_OTP',
+'                                   );',
 '  :P9998_OTP := null;',
 '  return l_ok;',
 'end;'))
 ,p_validation2=>'PLSQL'
 ,p_validation_type=>'FUNC_BODY_RETURNING_BOOLEAN'
 ,p_error_message=>'Invalid code. Try again.'
+,p_associated_item=>wwv_flow_imp.id(17711322079467702)
 ,p_error_display_location=>'INLINE_WITH_FIELD_AND_NOTIFICATION'
 );
 wwv_flow_imp_page.create_page_process(
@@ -14906,6 +14926,7 @@ wwv_flow_imp_page.create_page_process(
 ''))
 ,p_process_clob_language=>'PLSQL'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+,p_internal_uid=>17711719408467706
 );
 end;
 /
@@ -14925,7 +14946,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'12'
 ,p_last_updated_by=>'AW2020'
-,p_last_upd_yyyymmddhh24miss=>'20230305064711'
+,p_last_upd_yyyymmddhh24miss=>'20240328154205'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(17643377938140808)
@@ -15046,6 +15067,7 @@ wwv_flow_imp_page.create_page_process(
 ,p_attribute_03=>'APEX_AUTHENTICATION'
 ,p_attribute_04=>'SEND_LOGIN_USERNAME_COOKIE'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+,p_internal_uid=>17647133913140829
 );
 wwv_flow_imp_shared.create_invokeapi_comp_param(
  p_id=>wwv_flow_imp.id(17647653277140829)
@@ -15079,9 +15101,10 @@ wwv_flow_imp_page.create_page_process(
 ,p_process_type=>'NATIVE_INVOKE_API'
 ,p_process_name=>'Login'
 ,p_attribute_01=>'PLSQL_PACKAGE'
-,p_attribute_03=>'AW2023_AUTH'
+,p_attribute_03=>'DEMOTFA_AUTH'
 ,p_attribute_04=>'AUTHENTICATE_USING_TFA'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+,p_internal_uid=>17645312177140823
 );
 wwv_flow_imp_shared.create_invokeapi_comp_param(
  p_id=>wwv_flow_imp.id(17645803803140827)
@@ -15116,6 +15139,7 @@ wwv_flow_imp_page.create_page_process(
 ,p_attribute_01=>'CLEAR_CACHE_CURRENT_PAGE'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
 ,p_process_when_type=>'NEVER'
+,p_internal_uid=>17649052214140830
 );
 wwv_flow_imp_page.create_page_process(
  p_id=>wwv_flow_imp.id(17648614947140830)
@@ -15127,6 +15151,7 @@ wwv_flow_imp_page.create_page_process(
 ':P9999_USERNAME := apex_authentication.get_login_username_cookie;',
 ':P9999_REMEMBER := case when :P9999_USERNAME is not null then ''Y'' end;'))
 ,p_process_clob_language=>'PLSQL'
+,p_internal_uid=>17648614947140830
 );
 end;
 /
