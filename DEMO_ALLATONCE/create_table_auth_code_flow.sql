@@ -53,7 +53,7 @@ values(
 , 'https://api.atlassian.com/me'
 , ''
 , ''
-, 'read:me read:jira-work'
+, 'read:me read:jira-work write:jira-work'
 , 'audience=api.atlassian.com&prompt=consent'
 , 'name'
 , 'https://api.atlassian.com/oauth/token/accessible-resources'
