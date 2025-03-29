@@ -7,16 +7,6 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
       where  collection_name = c_token_collection_name
       and    c001 = b_name;
 
-    procedure callback(code varchar2, state varchar2, error varchar2)
-    is
-        l_redirect_url  varchar2(2000);
-    begin
-        l_redirect_url := c_base_uri||'f?p=125:1:';--||state||'::::P1_ERROR,P1_CODE:'||error||','||code;
-    --owa_util.redirect_url(l_redirect_url, true);
-    -- de owa_util.redirect_url werkt niet, dus dan maar zo:
-    htp.print('<body onload="document.location.href='''||l_redirect_url||'''"></body>');
-    end callback;
-
   function get_html_redirect(code in varchar2, state in varchar2, error in varchar2)
     return varchar2
   is
@@ -74,7 +64,7 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
     open c_tkn(p_name);
     fetch c_tkn into l_seq_id;
     close c_tkn;
-    apex_debug.message('seq id = '||l_seq_id);
+
     if l_seq_id is null
     then
       apex_collection.add_member(p_collection_name => c_token_collection_name
@@ -95,7 +85,6 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
                                    ,p_n001            => p_expires_in
                                    ,p_d001            => sysdate
                                    ,p_clob001         => p_clob);
-      apex_debug.message('member updated with token '||p_access_token);
     end if;
   end store_in_session;
 
@@ -132,22 +121,21 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
     l_username      varchar2(1000);
     l_additional_info varchar2(1000);
   begin
-    select token_url
-    ,      client_id
-    ,      client_secret
-    into   l_token_url
-    ,      l_client_id
-    ,      l_client_secret
-    from   auth_code_flow
-    where  name = p_name;
     if p_code is not null
     then
-      l_postdata := 'grant_type=authorization_code'                     ||chr(38)||
-                    'code='||p_code                                       ||chr(38)||
-                    'redirect_uri='||c_callback_uri                       ||chr(38)||
---                    'redirect_uri='||apex_util.url_encode(callback_uri) ||chr(38)||
-                    'client_id='||l_client_id                             ||chr(38)||
-                    'client_secret='||l_client_secret;
+      select token_url
+      ,      client_id
+      ,      client_secret
+      into   l_token_url
+      ,      l_client_id
+      ,      l_client_secret
+      from   auth_code_flow
+      where  name = p_name;
+      l_postdata := 'grant_type='    || 'authorization_code' ||chr(38)||
+                    'code='          || p_code               ||chr(38)||
+                    'redirect_uri='  || c_callback_uri       ||chr(38)||
+                    'client_id='     || l_client_id          ||chr(38)||
+                    'client_secret=' || l_client_secret;
       apex_web_service.g_request_headers(1).name := 'Content-Type';
       apex_web_service.g_request_headers(1).value := 'application/x-www-form-urlencoded'; 
       l_clob := apex_web_service.make_rest_request(
@@ -156,17 +144,17 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
       , p_body        => l_postdata
       );
       apex_json.parse(l_clob);
-      l_token := apex_json.get_varchar2('access_token');
+      l_token         := apex_json.get_varchar2('access_token');
       l_refresh_token := apex_json.get_varchar2('refresh_token');
-      l_token_type := apex_json.get_varchar2('token_type');
-      l_expires_in := apex_json.get_number('expires_in');
+      l_token_type    := apex_json.get_varchar2('token_type');
+      l_expires_in    := apex_json.get_number('expires_in');
       -- store data in collection
-      store_in_session(p_name => p_name
-                      ,p_access_token => l_token
-                      ,p_token_type => l_token_type
+      store_in_session(p_name          => p_name
+                      ,p_access_token  => l_token
+                      ,p_token_type    => l_token_type
                       ,p_refresh_token => l_refresh_token
-                      ,p_expires_in => l_expires_in
-                      ,p_clob => l_clob);
+                      ,p_expires_in    => l_expires_in
+                      ,p_clob          => l_clob);
       l_username := collect_username(p_name);
       update_in_session(p_name  => p_name
                        ,p_field => 5
@@ -217,7 +205,6 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
       p_url         => l_user_info_url
     , p_http_method => 'GET'
     );
-      apex_debug.message(l_clob);
     apex_json.parse(l_clob);
     l_username := apex_json.get_varchar2(l_username_field);
     return l_username;
@@ -245,7 +232,6 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
         p_url         => l_additional_info_url
       , p_http_method => 'GET'
       );
-      apex_debug.message(l_clob);
       apex_json.parse(l_clob);
       l_additional_info := apex_json.get_varchar2(l_additional_info_field);
     end if;
