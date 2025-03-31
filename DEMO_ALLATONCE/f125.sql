@@ -33,7 +33,7 @@ prompt APPLICATION 125 - All at once
 -- Application Export:
 --   Application:     125
 --   Name:            All at once
---   Date and Time:   14:56 Saturday March 29, 2025
+--   Date and Time:   12:56 Monday March 31, 2025
 --   Exported By:     AW2020
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -860,13 +860,13 @@ wwv_flow_imp_shared.create_web_source_module(
 ,p_web_source_type=>'NATIVE_HTTP'
 ,p_data_profile_id=>wwv_flow_imp.id(185452214646519729)
 ,p_remote_server_id=>wwv_flow_imp.id(185452025792519727)
-,p_url_path_prefix=>'/:sourceid/rest/api/3/project'
-,p_version_scn=>42195501496605
+,p_url_path_prefix=>'/:cloudid/rest/api/3/project'
+,p_version_scn=>42195551015504
 );
 wwv_flow_imp_shared.create_web_source_param(
  p_id=>wwv_flow_imp.id(185455122161519747)
 ,p_web_src_module_id=>wwv_flow_imp.id(185453306431519739)
-,p_name=>'sourceid'
+,p_name=>'cloudid'
 ,p_param_type=>'URL_PATTERN'
 ,p_data_type=>'VARCHAR2'
 ,p_is_required=>false
@@ -19975,7 +19975,7 @@ wwv_flow_imp_page.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_javascript_code=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'function create_issue(name) {',
-'    $s(''P2_SELECTED_PLAYLIST'',name);',
+'    $s(''P4_SELECTED_PLAYLIST'',name);',
 '    apex.submit(''CREATE_ISSUE'');',
 '}'))
 ,p_page_template_options=>'#DEFAULT#'

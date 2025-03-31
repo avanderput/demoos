@@ -14,8 +14,8 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
     l_session      varchar2(1000);
     l_name         varchar2(100);
   begin
-    l_name := substr(state,1,instr(state,';')-1);
-    l_session := substr(state,instr(state,';')+1);
+    l_name := substr(state,1,instr(state,'-')-1);
+    l_session := substr(state,instr(state,'-')+1);
     l_redirect_url := '../../f?p=125:1:'||l_session||':EXCHANGE:YES::P1_ERROR,P1_CODE,P1_NAME:'||error||','||code||','||l_name;
     return '<body onload="document.location.href='''||l_redirect_url||'''"></body>';
   end get_html_redirect;
@@ -43,7 +43,7 @@ create or replace package body AUTH_CODE_FLOW_UTIL as
                  'response_type=' || 'code'                                    || chr(38) || 
                  'redirect_uri='  || apex_util.url_encode(c_callback_uri)      || chr(38) || 
                  'scope='         || l_scope                                   || chr(38) || 
-                 'state='         || p_name || ';' || v('APP_SESSION')         ||
+                 'state='         || p_name || '-' || v('APP_SESSION')         ||
                  case when l_extra_parameters is not null then '&'||l_extra_parameters else '' end
     );
   end authorize;
