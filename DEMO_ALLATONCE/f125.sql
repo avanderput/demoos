@@ -33,7 +33,7 @@ prompt APPLICATION 125 - All at once
 -- Application Export:
 --   Application:     125
 --   Name:            All at once
---   Date and Time:   12:56 Monday March 31, 2025
+--   Date and Time:   14:48 Wednesday April 2, 2025
 --   Exported By:     AW2020
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -20226,19 +20226,19 @@ wwv_flow_imp_page.create_page_process(
 ,p_process_name=>'Create JIRA issue'
 ,p_process_sql_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'declare',
-'  l_create_issue_url varchar2(1000) := ''https://api.atlassian.com/ex/jira/:sourceid/rest/api/3/issue'';',
+'  l_create_issue_url varchar2(1000) := ''https://api.atlassian.com/ex/jira/:cloudid/rest/api/3/issue'';',
 '  l_url varchar2(1000);',
-'  l_sourceid varchar2(1000);',
+'  l_cloudid varchar2(1000);',
 '  l_return_clob clob;',
 '  l_payload clob;',
 'begin',
 '  select c006 ',
-'  into   l_sourceid',
+'  into   l_cloudid',
 '  from   apex_collections ',
 '  where  c001=''Jira''',
 '  and collection_name=''TOKENS''',
 '  ;',
-'  l_url := replace(l_create_issue_url,'':sourceid'',l_sourceid);',
+'  l_url := replace(l_create_issue_url,'':cloudid'',l_cloudid);',
 '  l_payload := ''{',
 '                    "fields": {',
 '                        "issuetype": {',
